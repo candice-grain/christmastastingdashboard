@@ -169,11 +169,12 @@
 
   /* ---------- recommendations ---------- */
   .recs{display:grid;gap:12px}
-  .rec{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
+  .rec{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:start;background:var(--card);border:1px solid var(--line);
        border-radius:var(--r-card);padding:16px 18px;box-shadow:var(--shadow)}
-  .rec .lens{flex:none;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  .rec .lens{justify-self:start;width:max-content;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
              background:var(--accent);color:var(--ink);border-radius:var(--r-pill);padding:6px 12px;margin-top:1px}
   .rec .action{font-size:14px;line-height:1.5}
+  @media(max-width:640px){.rec{grid-template-columns:1fr;gap:8px}}
 
   /* ---------- round tabs ---------- */
   .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
