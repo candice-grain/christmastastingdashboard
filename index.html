@@ -98,14 +98,18 @@
   .ai::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent)}
   .ai .headline{font-size:20px;font-weight:700;line-height:1.3;margin:2px 0 4px;text-wrap:balance;max-width:60ch}
   .ai .stamp{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
-  .themes{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:18px}
+  .themes{display:grid;grid-template-columns:1fr 1fr;gap:18px 30px;margin-top:20px}
+  @media(max-width:760px){.themes{grid-template-columns:1fr}}
   .theme .t{font-size:14px;font-weight:700;margin:0 0 4px}
   .theme .d{font-size:13.5px;color:#3a3833;line-height:1.5;margin:0}
-  .watch{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
-  .watch .wlabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);align-self:center;margin-right:4px}
-  .chip{font-size:12.5px;font-weight:600;background:var(--weak-tint);color:#7c241b;
-        border-radius:var(--r-pill);padding:6px 12px;display:inline-flex;gap:6px;align-items:center}
-  .chip .why{font-weight:400;color:#8a4038}
+  .watch{margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+  .wlabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px}
+  .witems{display:flex;flex-direction:column;gap:8px}
+  .witem{display:grid;grid-template-columns:180px 1fr;gap:16px;align-items:start;
+         background:var(--weak-tint);border-radius:12px;padding:12px 16px}
+  .witem .wd{font-weight:700;color:#7c241b;font-size:13px;line-height:1.3}
+  .witem .wr{color:#8a4038;font-size:13px;line-height:1.5}
+  @media(max-width:640px){.witem{grid-template-columns:1fr;gap:3px}}
   .ai-refreshing{font-size:12px;color:var(--muted);margin-top:12px;display:none}
   .ai-refreshing.show{display:block}
 
@@ -318,7 +322,7 @@
    CONFIG
    ============================================================ */
 const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbydhLZCRWtYkinCi69YVqtenDbrc1PnAZ9HgJQxaVJWoGPXTrBuKDEy2SisnAzowoCs/exec";
-const POLL_MS = 60000;   // gentle auto-refresh
+const POLL_MS = 0;   // gentle auto-refresh during a LIVE tasting; set to 0 to FREEZE (tasting done, synthesis final)
 
 const ROUNDS = [
   { title:"Salads & vegetables",           dishes:["Cauliflower Pumpkin Salad","Tomato Peach Salad","Roasted Christmas Vegetables","Vegetable Gratin","Broccoli with Orange Glazed Carrots"] },
@@ -475,9 +479,11 @@ function renderAI(){
   const themes = (ai.themes||[]).map(t=>`
     <div class="theme"><p class="t">${esc(t.title)}</p><p class="d">${esc(t.detail)}</p></div>`).join('');
   const watch = (ai.watch||[]).length ? `
-    <div class="watch"><span class="wlabel">Watch</span>${
-      ai.watch.map(w=>`<span class="chip">${esc(w.dish)}<span class="why">— ${esc(w.reason)}</span></span>`).join('')
-    }</div>` : '';
+    <div class="watch">
+      <div class="wlabel">Watch</div>
+      <div class="witems">${ai.watch.map(w=>`
+        <div class="witem"><span class="wd">${esc(w.dish)}</span><span class="wr">${esc(w.reason)}</span></div>`).join('')}</div>
+    </div>` : '';
   $('ai').innerHTML = `
     <div class="stamp">AI synthesis</div>
     <p class="headline">${esc(ai.headline)}</p>
@@ -670,7 +676,7 @@ document.addEventListener('keydown', e=>{
 });
 
 load(false);
-setInterval(()=>load(false), POLL_MS);
+if(POLL_MS) setInterval(()=>load(false), POLL_MS);   // no polling when POLL_MS is 0 (frozen)
 </script>
 </body>
 </html>
