@@ -204,6 +204,9 @@
   .m-round{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
   .modal-card h3{font-size:24px;font-weight:700;margin:4px 0 2px;line-height:1.15;text-wrap:balance;padding-right:36px}
   .m-sub{font-size:13px;color:var(--muted)}
+  .dish-read{font-size:14px;line-height:1.5;color:#3a3833;background:#faf9f6;border-left:3px solid var(--accent);
+             border-radius:8px;padding:12px 14px;margin:14px 0 2px}
+  .dish-read .rl{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:5px}
   .m-metrics{margin:18px 0 6px;padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
   .m-clabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:18px 0 10px}
   .m-comments{display:flex;flex-direction:column;gap:9px}
@@ -320,7 +323,7 @@ const POLL_MS = 60000;   // gentle auto-refresh
 const ROUNDS = [
   { title:"Salads & vegetables",           dishes:["Cauliflower Pumpkin Salad","Tomato Peach Salad","Roasted Christmas Vegetables","Vegetable Gratin","Broccoli with Orange Glazed Carrots"] },
   { title:"Seafood & Poultry",              dishes:["Sicilian-Style Baked Fish","Confit Norwegian Salmon with Roe Caviar Sauce","Xmas Spiced Chicken with Diane Sauce","Christmas Meatballs and Stuffing","Duck Confit with Foie Gras Sauce"] },
-  { title:"Beef, live station & dessert",   dishes:["Wagyu Beef Shortrib and Oxtail Stew","Cinnamon Roll","[Live station] Grain X Ember Striploin Carvery Station"] },
+  { title:"Beef, live station & dessert",   dishes:["Wagyu Beef Shortrib and Oxtail Stew","Cinnamon Roll","[Live station] Grain X Ember Striploin Carvery Station","Strawberry Lemonade"] },
 ];
 const M = {
   tasted:"Tasted?", presentation:"Presentation (1-5)", presentation_fb:"Presentation notes",
@@ -565,6 +568,7 @@ function openDish(dish){
     <div class="m-round">${esc(s.round)}</div>
     <h3 id="mTitle">${esc(s.dish)}</h3>
     <div class="m-sub">${s.tasted} of ${s.respondents} tasted</div>
+    ${(STATE.ai && STATE.ai.dishes && STATE.ai.dishes[dish]) ? `<div class="dish-read"><span class="rl">The read</span>${esc(STATE.ai.dishes[dish])}</div>` : ''}
     <div class="indiv-head">
       <div class="m-clabel" style="margin:0">Individual responses</div>
       <div class="indiv-nav">
